@@ -10,4 +10,11 @@ app.use(cors({
 app.use(express.json({limit:"15kb"}));
 app.use(express.urlencoded());
 app.use(express.static("public"))
+
+//routes import 
+const userRouter = require("./routes/user.routes");
+
+//route define
+app.use("/api/v1/users",userRouter);
+
 module.exports = app;  
