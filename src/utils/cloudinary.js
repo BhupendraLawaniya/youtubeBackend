@@ -13,7 +13,7 @@ const uploadOnCloudinary = (localFilePath) => {
     const response = cloudinary.v2.uploader
       .upload(localFilePath, {
         resource_type: "auto",
-        public_id: "my_dog",
+        public_id: "Just_Learn",
         overwrite: true
       })
       .then(result => console.log(result));
