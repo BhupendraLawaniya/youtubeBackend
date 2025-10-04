@@ -1,7 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler")
 const apiError = require("../utils/apiError");
 const User = require("../modles/user.model");
-const uploadOnCloudinary = require("../utils/cloudinary");
+const uploadOnCloudinary = require("../utils/cloudinary.js");
 const apiResponse = require("../utils/apiResponse");
 const userRegister = asyncHandler( async(req, res)=>{
     //get user data from frontend
@@ -15,17 +15,19 @@ const userRegister = asyncHandler( async(req, res)=>{
     //return res 
 
 
-    const {username,email,fullname,password} = req.body;
+    const {userName,email,fullName,password} = req.body;
 
-    if([fullname, email, username, password].some((field)=> field?.trim() === ""))
+    if([fullName, email, userName, password].some((field)=> field?.trim() === ""))
     {
         throw new apiError(400,"All fields are required");
     }
     //check user is exist already or not
 
-    const existedUser = User.findOne({
-        $or:[{ username },{ email }]
+    const existedUser = await User.findOne({
+        $or:[{ userName },{ email }]
     })
+
+
     if(existedUser){
         throw new apiError(409,"User with email or user name already exist")
     }
@@ -33,6 +35,8 @@ const userRegister = asyncHandler( async(req, res)=>{
     //check for image and avatar
 
     const avatarLocalPath = req.files?.avatar[0]?.path;
+
+
     const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
     if(!avatarLocalPath){
